@@ -34,24 +34,42 @@ login.post("/", uploads.single("profile"), async (req, res) => {
   if (existingUser) {
     res.send("User already Exists");
   } else {
-    const user = Login({
-      name,
-      userName,
-      email,
-      password: hashedPassword,
-      profile: {
-        data: fs.readFileSync("./Routes/uploads/" + req.file.filename),
-        contentType: profile.mimeType,
-      },
-    });
-    user
-      .save()
-      .then((result) => {
-        res.send(user);
-      })
-      .catch((err) => {
-        console.log(err);
+    if (profile) {
+      const user = Login({
+        name,
+        userName,
+        email,
+        password: hashedPassword,
+        profile: {
+          data: fs.readFileSync("./Routes/uploads/" + req.file.filename),
+          contentType: profile.mimeType,
+        },
       });
+      user
+        .save()
+        .then((result) => {
+          res.send(user);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      } else {
+      const user = Login({
+        name,
+        userName,
+        email,
+        password: hashedPassword,
+      });
+      user
+        .save()
+        .then((result) => {
+          res.send(user);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      
+    }
   }
 });
 
