@@ -53,7 +53,7 @@ login.post("/", uploads.single("profile"), async (req, res) => {
         .catch((err) => {
           console.log(err);
         });
-      } else {
+    } else {
       const user = Login({
         name,
         userName,
@@ -68,7 +68,6 @@ login.post("/", uploads.single("profile"), async (req, res) => {
         .catch((err) => {
           console.log(err);
         });
-      
     }
   }
 });
@@ -104,29 +103,33 @@ login.post("/checkUser", async (req, res) => {
   const { token } = req.body;
 
   if (token) {
-    const decode = jwt.verify(token, process.env.SECRET_KEY);
-    let user = await Login.findById(decode.user);
-    if (user) {
-      user = {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        userName: user.userName,
-        password: user.password,
-        profile: `${
-          user?.profile.data !== undefined
-            ? `data:${
-                user.profile.contentType
-              };base64,${user.profile.data?.toString("base64")}`
-            : ""
-        }`,
-      };
-      res.send(user);
-    } else {
-      res.send("Unautorized");
+    try {
+      const decode = jwt.verify(token, process.env.SECRET_KEY);
+      let user = await Login.findById(decode.user);
+      if (user) {
+        user = {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          userName: user.userName,
+          password: user.password,
+          profile: `${
+            user?.profile.data !== undefined
+              ? `data:${
+                  user.profile.contentType
+                };base64,${user.profile.data?.toString("base64")}`
+              : ""
+          }`,
+        };
+        res.status(200).send(user);
+      } else {
+        res.status(201).send("Unautorized");
+      }
+    } catch (err) {
+      res.status(201).send(err);
     }
   } else {
-    res.send("Unautorized");
+    res.status(201).send("Unautorized");
   }
 });
 
