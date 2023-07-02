@@ -43,6 +43,10 @@ app.post("/getMessages/:userId", verify, async (req, res) => {
   }
 });
 
+app.get("/",(req,res)=>{
+	res.send("Hello world");
+}
+
 app.get("/getGroupChat", async (req, res) => {
   const messages = await Group.find().sort({
     createdAt: 1,

@@ -19,6 +19,10 @@ connectToDb();
 app.use(cors());
 app.use(express.json());
 
+app.get("/",(req,res)=>{
+	res.send("Hello world");
+})
+
 io.on("connection", (socket) => {
   console.log(`Connected`);
 
