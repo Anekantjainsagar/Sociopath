@@ -44,7 +44,7 @@ app.post("/getMessages/:userId", verify, async (req, res) => {
 });
 
 app.get("/",(req,res)=>{
-	res.send("Hello world");
+	res.send("Hello world from Backend");
 }
 
 app.get("/getGroupChat", async (req, res) => {
